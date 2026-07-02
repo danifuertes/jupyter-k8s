@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Cluster configuration for the auto_install scripts.
+# Cluster configuration file
 #
 # HOW TO USE:
 #   1. Copy this file:   cp config.example.yaml config.yaml

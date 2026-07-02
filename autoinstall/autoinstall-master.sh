@@ -2,7 +2,7 @@
 set -e  # Exit on any error
 
 # Load shared utilities and cluster configuration (node lists, users)
-source "$(dirname "$0")/utils.sh"
+source "$(dirname "$0")/../utils/functions.sh"
 
 # Trap any script error and print a banner
 trap 'handle_failure $LINENO' ERR

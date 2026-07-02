@@ -1,8 +1,8 @@
 #!/bin/bash
 # ---------------------------------------------------------------------------
-# Shared utilities for the auto_install scripts.
+# Shared config helpers for the cluster scripts.
 #
-# Source this file from a script:   source "$(dirname "$0")/utils.sh"
+# Source this file from a script:   source "$(dirname "$0")/../utils/functions.sh"
 # It exposes:
 #   cfg_cluster <key>     -> prints a scalar under the top-level "cluster:" map
 #   cfg_node_names <sec>  -> prints the node names of a section (masters/workers)
@@ -14,8 +14,9 @@
 # parsing of the simple schema shipped in config.example.yaml.
 # ---------------------------------------------------------------------------
 
-# Locate the config file next to this library, unless overridden.
-CONFIG_FILE="${CONFIG_FILE:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/config.yaml}"
+# Locate the config file at the workspace root (one level up from this
+# library, which lives in utils/), unless overridden.
+CONFIG_FILE="${CONFIG_FILE:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/config.yaml}"
 
 if [ ! -f "$CONFIG_FILE" ]; then
     echo >&2

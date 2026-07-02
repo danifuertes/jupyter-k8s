@@ -2,7 +2,7 @@
 set -e  # Stop execution if any command fails
 
 # Load shared utilities and cluster configuration (node lists, users)
-source "$(dirname "$0")/utils.sh"
+source "$(dirname "$0")/../utils/functions.sh"
 
 # Prompt for the sudo password
 read -sp 'Enter your sudo password: ' PASSWORD
