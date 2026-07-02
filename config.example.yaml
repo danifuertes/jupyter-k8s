@@ -30,3 +30,24 @@ workers:
     ip: <worker-1-ip>
   - name: <worker-2-name>
     ip: <worker-2-ip>
+
+# JupyterHub deployment settings. These are injected into the Helm release by
+# jupyterhub/create.sh, so they do NOT need to be duplicated in
+# jupyterhub/config.yaml.
+jupyterhub:
+
+  # Public hostname. Must match the CN/SAN of the TLS certificate.
+  hostname: <jupyterhub-hostname>
+
+  # Container image used for the user notebook servers.
+  image_name: <notebook-image>
+  image_tag: <notebook-image-tag>
+
+# JupyterHub administrator accounts (one "- <user>" per line)
+admins:
+  - <admin-user>
+
+# Users allowed to log in (one "- <user>" per line)
+users:
+  - <user-1>
+  - <user-2>

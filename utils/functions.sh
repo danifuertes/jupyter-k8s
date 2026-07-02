@@ -4,9 +4,11 @@
 #
 # Source this file from a script:   source "$(dirname "$0")/../utils/functions.sh"
 # It exposes:
-#   cfg_cluster <key>     -> prints a scalar under the top-level "cluster:" map
-#   cfg_node_names <sec>  -> prints the node names of a section (masters/workers)
-#   cfg_nodes <sec>       -> prints "name ip" pairs of a section
+#   cfg_map <section> <key>   -> prints a scalar under a top-level "<section>:" map
+#   cfg_cluster <key>         -> shortcut for cfg_map cluster <key>
+#   cfg_scalar_list <section> -> prints the items of a top-level "- value" list
+#   cfg_node_names <sec>      -> prints the node names of a section (masters/workers)
+#   cfg_nodes <sec>           -> prints "name ip" pairs of a section
 #   handle_success <name> -> prints a green "installed successfully" banner
 #   handle_failure <line> -> prints a red error banner and exits (use with trap)
 #
@@ -27,14 +29,36 @@ if [ ! -f "$CONFIG_FILE" ]; then
     exit 1
 fi
 
-# Print a scalar value stored under the top-level "cluster:" mapping.
-cfg_cluster() {
-    awk -v key="$1" '
-        /^cluster:/ { in_c=1; next }
+# Print a scalar value stored under an arbitrary top-level "<section>:" mapping.
+# Example:  cfg_map jupyterhub hostname
+cfg_map() {
+    awk -v section="$1" -v key="$2" '
+        $0 ~ "^" section ":" { in_c=1; next }
         /^[^[:space:]]/ { in_c=0 }
         in_c {
             for (i = 1; i <= NF; i++)
                 if ($i == key ":") { print $(i + 1); exit }
+        }
+    ' "$CONFIG_FILE"
+}
+
+# Backwards-compatible shortcut for values under the "cluster:" mapping.
+cfg_cluster() {
+    cfg_map cluster "$1"
+}
+
+# Print every item of a top-level list of plain scalars, e.g.
+#   users:
+#     - <user-1-name>
+#     - <user-2-name>
+# Usage:  cfg_scalar_list users
+cfg_scalar_list() {
+    awk -v section="$1" '
+        $0 ~ "^" section ":" { in_s=1; next }
+        /^[^[:space:]]/ { in_s=0 }
+        in_s {
+            for (i = 1; i <= NF; i++)
+                if ($i == "-") { print $(i + 1); break }
         }
     ' "$CONFIG_FILE"
 }
