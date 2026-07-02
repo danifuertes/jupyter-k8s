@@ -1,0 +1,32 @@
+# ---------------------------------------------------------------------------
+# Cluster configuration for the auto_install scripts.
+#
+# HOW TO USE:
+#   1. Copy this file:   cp config.example.yaml config.yaml
+#   2. Edit config.yaml with your real node names / IPs / users.
+#   3. Run the scripts. They read config.yaml automatically
+#      (override the path with:  CONFIG_FILE=/path/to/file.yaml ./script.sh)
+#
+# NOTE: config.yaml is git-ignored so your site details never get committed.
+#       Do NOT put passwords in here — the scripts prompt for them instead.
+# ---------------------------------------------------------------------------
+
+cluster:
+
+  # Existing admin account on the master node
+  master_user: <master-user>
+
+  # Non-privileged user created on each worker node
+  worker_user: <worker-user>
+
+# List of master nodes. Add one "- name: / ip:" pair per master node
+masters:
+  - name: <master-name>
+    ip: <master-ip>
+
+# List of worker nodes. Add one entry per worker node
+workers:
+  - name: <worker-1-name>
+    ip: <worker-1-ip>
+  - name: <worker-2-name>
+    ip: <worker-2-ip>
