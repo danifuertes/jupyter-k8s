@@ -7,7 +7,7 @@ source "$(dirname "$0")/../utils/functions.sh"
 # Trap any script error and print a banner
 trap 'handle_failure $LINENO' ERR
 
-# Worker nodes (names), read from config.yaml
+# Worker nodes (names), read from inputs.yaml
 mapfile -t NODES < <(cfg_node_names workers)
 
 # Disable swap
@@ -108,7 +108,7 @@ systemctl start nfs-kernel-server.service
 mkdir -p /srv/nfs/kubernetes
 chown nobody:nogroup /srv/nfs/kubernetes
 chmod 777 /srv/nfs/kubernetes
-# Build the NFS export allow-list from the worker nodes in config.yaml
+# Build the NFS export allow-list from the worker nodes in inputs.yaml
 {
     echo
     echo "# Kubernetes cluster"

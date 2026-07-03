@@ -39,7 +39,7 @@ if [ -z "$PASSWORD" ]; then
     echo
 fi
 
-# Get master node IP address from config.yaml (assuming a single master)
+# Get master node IP address from inputs.yaml (assuming a single master)
 IP_MASTER=$(cfg_nodes masters | awk 'NR==1 {print $2}')
 if [ -z "$IP_MASTER" ]; then
     echo "ERROR: no master node found in $CONFIG_FILE" >&2

@@ -1,0 +1,38 @@
+# ---------------------------------------------------------------------------
+# Cluster inputs file
+#
+# HOW TO USE:
+#   1. Copy this file:   cp inputs.example.yaml inputs.yaml
+#   2. Edit inputs.yaml with your real node names / IPs / users.
+#   3. Run the scripts. They read inputs.yaml automatically
+#      (override the path with:  CONFIG_FILE=/path/to/file.yaml ./script.sh)
+#
+# NOTE: inputs.yaml is git-ignored so your site details never get committed.
+# ---------------------------------------------------------------------------
+
+# Cluster settings
+cluster:
+  master_user: <master-user>        # Existing admin account on the master node
+  worker_user: <worker-user>        # Non-privileged user created on each worker node
+  masters:                          # List of master nodes. One "- name: / ip:" pair per node
+    - name: <master-name>
+      ip: <master-ip>
+  workers:                          # List of worker nodes. One entry per worker node
+    - name: <worker-1-name>
+      ip: <worker-1-ip>
+    - name: <worker-2-name>
+      ip: <worker-2-ip>
+  nfs:                              # NFS server (can be equal to a master node)
+    name: <nfs-name>
+    ip: <nfs-ip>
+
+# JupyterHub settings -> injected into Helm from jupyterhub/create.sh
+jupyterhub:
+  hostname: <jupyterhub-hostname>   # Must match the CN/SAN of the TLS certificate
+  image_name: <notebook-image>      # Container image for the user notebook servers
+  image_tag: <notebook-image-tag>
+  admins:                           # JupyterHub administrator accounts (one "- <user>" per line)
+    - <admin-user>
+  users:                            # Users allowed to log in (one "- <user>" per line)
+    - <user-1>
+    - <user-2>

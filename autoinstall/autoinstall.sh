@@ -8,7 +8,7 @@ source "$(dirname "$0")/../utils/functions.sh"
 read -sp 'Enter your sudo password: ' PASSWORD
 echo
 
-# Variables (read from config.yaml — no hardcoded/sensitive values)
+# Variables (read from inputs.yaml — no hardcoded/sensitive values)
 USERNAME="$(cfg_cluster master_user)"
 # Target every master and worker node defined in the config
 mapfile -t MACHINES < <(cfg_node_names masters; cfg_node_names workers)

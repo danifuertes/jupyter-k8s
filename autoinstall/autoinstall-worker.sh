@@ -7,10 +7,10 @@ source "$(dirname "$0")/../utils/functions.sh"
 # Trap any script error and print a banner
 trap 'handle_failure $LINENO' ERR
 
-# Worker nodes (names), read from config.yaml
+# Worker nodes (names), read from inputs.yaml
 mapfile -t NODES < <(cfg_node_names workers)
 
-# Create student user (name/groups from config.yaml; password prompted, never stored)
+# Create student user (name/groups from inputs.yaml; password prompted, never stored)
 USERNAME="$(cfg_cluster worker_user)"
 GROUPS="users"
 read -sp "Enter password for new user '$USERNAME': " NODE_PASSWORD

@@ -21,8 +21,5 @@ POD_NETWORK_CIDR="192.168.0.0/16"
 NFS_EXPORT="/srv/nfs/kubernetes"
 NFS_MOUNT="/mnt/nfs/kubernetes"
 
-# Primary network interface, used to auto-detect this node's IP
-NET_INTERFACE="eno1"
-
 # Kubernetes namespace where JupyterHub and its storage are deployed
 JUPYTERHUB_NAMESPACE="jk8s"

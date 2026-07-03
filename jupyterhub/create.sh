@@ -5,34 +5,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../utils/functions.sh"
 source "$SCRIPT_DIR/../utils/variables.sh"
 
-# NFS server IP: this node (the master) unless overridden with --nfs_server.
-IP_NFS_SERVER=$(ip -br a | awk -v iface="$NET_INTERFACE" '$1 == iface {print $3}' | cut -d'/' -f1)
+# NFS settings
+NFS_SERVER_IP=$(cfg_map nfs ip)
 
-usage() {
-    echo "Usage: $0 [--nfs_server <nfs-server-ip>]"
-    exit 1
-}
-
-# Parse arguments
-if [[ $# -gt 0 ]]; then
-    case $1 in
-        --nfs_server)
-            [[ -z $2 ]] && { echo "Error: --nfs_server requires an argument."; usage; }
-            IP_NFS_SERVER=$2
-            ;;
-        *)
-            usage
-            ;;
-    esac
-fi
-
-if [[ -z "$IP_NFS_SERVER" ]]; then
-    echo "ERROR: could not determine the NFS server IP (interface '$NET_INTERFACE')." >&2
-    echo "       Pass it explicitly with:  $0 --nfs_server <ip>" >&2
-    exit 1
-fi
-
-# Get JupyterHub settings from config.yaml
+# JupyterHub settings
 HOSTNAME=$(cfg_map jupyterhub hostname)
 IMAGE_NAME=$(cfg_map jupyterhub image_name)
 IMAGE_TAG=$(cfg_map jupyterhub image_tag)
@@ -49,20 +25,20 @@ for user in $(cfg_scalar_list users); do
 done
 
 # Create namespace
-kubectl create namespace "$JUPYTERHUB_NAMESPACE" \
-    --dry-run=client -o yaml | kubectl apply -f -
+kubectl create namespace "$JUPYTERHUB_NAMESPACE"
 
 # Create NFS provisioner and storage class
 helm upgrade --install nfs-subdir-external-provisioner \
     nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
-    --set nfs.server="$IP_NFS_SERVER" --set nfs.path="$NFS_EXPORT"
+    --set nfs.server="$NFS_SERVER_IP" \
+    --set nfs.path="$NFS_EXPORT"
 kubectl apply -f "$SCRIPT_DIR/storage.yaml" -n "$JUPYTERHUB_NAMESPACE"
 
 # Create/refresh the Kubernetes TLS secret from the Let's Encrypt certificates
 kubectl create secret tls jupyterhub-tls \
-    --cert="$SCRIPT_DIR/jupyter-crt.pem" --key="$SCRIPT_DIR/jupyter-key.pem" \
-    -n "$JUPYTERHUB_NAMESPACE" \
-    --dry-run=client -o yaml | kubectl apply -f -
+    --cert="$SCRIPT_DIR/jupyter-crt.pem" \
+    --key="$SCRIPT_DIR/jupyter-key.pem" \
+    -n "$JUPYTERHUB_NAMESPACE"
 
 # Launch JupyterHub
 helm upgrade --cleanup-on-fail --install jupyterhub jupyterhub/jupyterhub \

@@ -1,4 +1,5 @@
-/config.yaml
+/*.yaml
+!/inputs.example.yaml
 *.pem
 *.crt
 *.key

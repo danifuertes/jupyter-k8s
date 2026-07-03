@@ -1,19 +1,17 @@
 #!/bin/bash
 
-# Resolve the repo root so it runs from anywhere
+# Resolve the repo root so it runs from anywhere, and load utils
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# Load shared config helpers (cfg_node_names, ...) and validate config.yaml
 source "$ROOT_DIR/utils/functions.sh"
 
-# Get workers from config.yaml
+# Get workers
 WORKERS=$(cfg_node_names workers)
 if [ -z "$WORKERS" ]; then
     echo "ERROR: no worker nodes found in $CONFIG_FILE" >&2
     exit 1
 fi
 
-# Get sudo password and share it with the sub-scripts
+# Get sudo password
 read -sp 'Enter sudo password: ' PASSWORD
 echo
 export PASSWORD
