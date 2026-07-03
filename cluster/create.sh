@@ -85,6 +85,11 @@ echo "# Cluster created successfully! #"
 echo "#################################"
 echo
 
+# Refresh NFS exports before workers mount
+echo
+echo "Refreshing NFS exports on the server..."
+echo $PASSWORD | sudo -S exportfs -ra
+
 # Join the worker nodes (collected while parsing arguments) to the cluster
 if [ -z "$nodes" ]; then
     echo
