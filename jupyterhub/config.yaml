@@ -58,6 +58,13 @@ cull:
   # users: false                # Set to false to prevent user culling (pods will stay alive indefinitely)
   # max_age: 0                  # Set to 0 to disable maximum age-based culling
 
+# Image pre-puller
+prePuller:
+  hook:
+    enabled: false              # Don't block the Helm install on a pre-pull hook
+  continuous:
+    enabled: true               # Background DaemonSet pre-pulls the image on every node
+
 singleuser:
 
   uid: 1001   # Run as user with UID 1001
