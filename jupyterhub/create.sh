@@ -14,7 +14,7 @@ helm upgrade --install nfs-subdir-external-provisioner \
     nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
     --set nfs.server="$NFS_SERVER_IP" \
     --set nfs.path="$NFS_EXPORT"
-kubectl apply -f "$SCRIPT_DIR/storage.yaml" -n "$JUPYTERHUB_NAMESPACE"
+kubectl apply -f "$SCRIPT_DIR/data/storage.yaml" -n "$JUPYTERHUB_NAMESPACE"
 
 # Create/refresh the Kubernetes TLS secret from the Let's Encrypt certificates
 kubectl create secret tls jupyterhub-tls \
