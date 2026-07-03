@@ -1,37 +1,7 @@
 #!/bin/bash
-
-# Resolve this script's directory so it can be run from anywhere, and load
-# shared config helpers (cfg_nodes, ...) and semi-hardcoded variables.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../utils/functions.sh"
 source "$SCRIPT_DIR/../utils/variables.sh"
-
-# Default values
-IP_NFS_SERVER=""
-
-# Function to display usage
-usage() {
-    echo "Usage: $0 [--nfs_server <nfs-server-ip>] <worker-nodes...>"
-    exit 1
-}
-
-# Parse arguments
-while [[ $# -gt 0 ]]; do
-    case $1 in
-        --nfs_server)
-            if [[ -z $2 ]]; then
-                echo "Error: --nfs_server requires an argument."
-                usage
-            fi
-            IP_NFS_SERVER=$2
-            shift 2
-            ;;
-        *)
-            nodes="$@"
-            break
-            ;;
-    esac
-done
 
 # Prompt for the sudo password
 if [ -z "$PASSWORD" ]; then
@@ -39,14 +9,18 @@ if [ -z "$PASSWORD" ]; then
     echo
 fi
 
-# Get master node IP address from inputs.yaml (assuming a single master)
+# Get worker nodes
+nodes=$(cfg_node_names workers)
+
+# Get master nodes
 IP_MASTER=$(cfg_nodes masters | awk 'NR==1 {print $2}')
 if [ -z "$IP_MASTER" ]; then
     echo "ERROR: no master node found in $CONFIG_FILE" >&2
     exit 1
 fi
 
-# Set IP_NFS_SERVER to IP_MASTER if not provided
+# Get NFS server
+IP_NFS_SERVER=$(cfg_nodes nfs | awk 'NR==1 {print $2}')
 if [[ -z "$IP_NFS_SERVER" ]]; then
     IP_NFS_SERVER="$IP_MASTER"
 fi
@@ -76,7 +50,6 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 echo
-
 
 # Apply Calico networking manifest
 echo

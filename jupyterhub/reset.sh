@@ -1,6 +1,4 @@
 #!/bin/bash
-
-# Resolve this script's directory so it can be run from anywhere, and load utils
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../utils/variables.sh"
 

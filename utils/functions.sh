@@ -14,10 +14,8 @@
 #   handle_failure <line>     -> prints a red error banner and exits (use with trap)
 # ---------------------------------------------------------------------------
 
-# Locate the config file at the workspace root (one level up from this
-# library, which lives in utils/), unless overridden
+# Locate the config file at the workspace root, unless overridden
 CONFIG_FILE="${CONFIG_FILE:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/inputs.yaml}"
-
 if [ ! -f "$CONFIG_FILE" ]; then
     echo >&2
     echo "ERROR: inputs file not found: $CONFIG_FILE" >&2

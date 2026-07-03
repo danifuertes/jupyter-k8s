@@ -1,12 +1,10 @@
 #!/bin/bash
-
-# Resolve this script's directory so it can be run from anywhere, and load
-# the semi-hardcoded variables (CRI_SOCKET, ...).
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../utils/functions.sh"
 source "$SCRIPT_DIR/../utils/variables.sh"
 
-# Worker nodes to reset are passed as positional arguments
-nodes="$@"
+# Get worker nodes
+nodes=$(cfg_node_names workers)
 
 # Prompt for the sudo password
 if [ -z "$PASSWORD" ]; then
@@ -33,8 +31,6 @@ echo "# Cluster reset successfully! #"
 echo "###############################"
 echo
 
-# Get the node IPs as arguments
-# nodes="$@"
 if [ -z "$nodes" ]; then
     echo
     echo "No nodes provided to reset the cluster. Run this command manually on the worker nodes:"
