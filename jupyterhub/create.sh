@@ -8,22 +8,6 @@ source "$SCRIPT_DIR/../utils/variables.sh"
 # NFS settings
 NFS_SERVER_IP=$(cfg_map nfs ip)
 
-# JupyterHub settings
-HOSTNAME=$(cfg_map jupyterhub hostname)
-IMAGE_NAME=$(cfg_map jupyterhub image_name)
-IMAGE_TAG=$(cfg_map jupyterhub image_tag)
-set_args=()
-i=0
-for user in $(cfg_scalar_list admins); do
-    set_args+=(--set-string "hub.config.Authenticator.admin_users[$i]=$user")
-    i=$((i + 1))
-done
-i=0
-for user in $(cfg_scalar_list users); do
-    set_args+=(--set-string "hub.config.Authenticator.allowed_users[$i]=$user")
-    i=$((i + 1))
-done
-
 # Create namespace
 kubectl create namespace "$JUPYTERHUB_NAMESPACE"
 
@@ -43,8 +27,4 @@ kubectl create secret tls jupyterhub-tls \
 # Launch JupyterHub
 helm upgrade --cleanup-on-fail --install jupyterhub jupyterhub/jupyterhub \
     --namespace "$JUPYTERHUB_NAMESPACE" \
-    --values "$SCRIPT_DIR/config.yaml" \
-    --set-string proxy.https.hosts[0]="$HOSTNAME" \
-    --set-string singleuser.image.name="$IMAGE_NAME" \
-    --set-string singleuser.image.tag="$IMAGE_TAG" \
-    "${set_args[@]}"
+    --values "$SCRIPT_DIR/config.yaml"

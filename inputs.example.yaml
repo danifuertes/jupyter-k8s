@@ -25,14 +25,3 @@ cluster:
   nfs:                              # NFS server (can be equal to a master node)
     name: <nfs-name>
     ip: <nfs-ip>
-
-# JupyterHub settings -> injected into Helm from jupyterhub/create.sh
-jupyterhub:
-  hostname: <jupyterhub-hostname>   # Must match the CN/SAN of the TLS certificate
-  image_name: <notebook-image>      # Container image for the user notebook servers
-  image_tag: <notebook-image-tag>
-  admins:                           # JupyterHub administrator accounts (one "- <user>" per line)
-    - <admin-user>
-  users:                            # Users allowed to log in (one "- <user>" per line)
-    - <user-1>
-    - <user-2>

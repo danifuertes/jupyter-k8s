@@ -14,8 +14,8 @@ proxy:
 
   https:
     enabled: true
-    # hosts:          # Injected from inputs.yaml
-    #   - <your-host>
+    hosts:
+      - <hub-hostname>       # Must match the CN/SAN of the TLS certificate
     type: secret
     secret:
       name: jupyterhub-tls
@@ -39,12 +39,15 @@ hub:
     JupyterHub:
       authenticator_class: nativeauthenticator.NativeAuthenticator
       admin_access: false
-    # Authenticator:    # Injected from inputs.yaml
-    #   admin_users:
-    #     - <admin-user>
-    #   allowed_users:
-    #     - <user1>
-    #     - <user2>
+    Authenticator:
+      admin_users:              # JupyterHub administrator accounts
+        - <admin-1-name>
+      allowed_users:            # Users allowed to log in
+        - <user-1-name>
+        - <user-2-name>
+        - <user-3-name>
+        - <user-4-name>
+        - <user-5-name>
 
 # Culler (destroy non-used pods)
 cull:
@@ -67,9 +70,9 @@ singleuser:
       pvcNameTemplate: "claim-{username}"
 
   # Profiles (default docker images)
-  # image:                        # Injected from inputs.yaml
-  #   name: <docker-image-name>
-  #   tag: <docker-image-tag>
+  image:
+    name: marcosrodrigot/robomaster-notebook
+    tag: v3
   profileList:
 
     - display_name: "Entorno mínimo"
@@ -78,7 +81,6 @@ singleuser:
 
     - display_name: "Entorno GPU"
       description: "Herramientas y librerías necesarias para el entrenamiento e inferencia de redes neuronales."
-      # Inherits the image above; only adds a GPU to the resource limits.
       kubespawner_override:
         extra_resource_limits:
           nvidia.com/gpu: "1"
