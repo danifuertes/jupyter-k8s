@@ -3,6 +3,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../utils/functions.sh"
 source "$SCRIPT_DIR/../utils/variables.sh"
 
+# Render config.yaml from config.template.yaml + inputs.yaml
+"$SCRIPT_DIR/update-config.sh"
+
 # NFS settings
 NFS_SERVER_IP=$(cfg_map nfs ip)
 

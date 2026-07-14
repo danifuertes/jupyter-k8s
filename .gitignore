@@ -1,5 +1,6 @@
 /*.yaml
 !/inputs.example.yaml
+/jupyterhub/config.yaml
 *.pem
 *.crt
 *.key

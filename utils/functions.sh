@@ -47,8 +47,8 @@ cfg_cluster() {
 
 # Print every item of a "- value" list section (at any depth), e.g.
 #   users:
-#     - <user-1-name>
-#     - <user-2-name>
+#     - user1
+#     - user2
 # Usage:  cfg_scalar_list users
 cfg_scalar_list() {
     awk -v section="$1" '
