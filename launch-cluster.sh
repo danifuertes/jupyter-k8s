@@ -18,3 +18,4 @@ cd "$ROOT_DIR/cluster"
 # Launch JupyterHub
 cd "$ROOT_DIR/jupyterhub"
 ./create.sh
+cd "$ROOT_DIR"
