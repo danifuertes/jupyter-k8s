@@ -55,6 +55,7 @@ cfg_scalar_list() {
         function indent(s) { match(s, /^ */); return RLENGTH }
         !in_s && !done && $0 ~ "^[[:space:]]*" section ":" { in_s=1; hind=indent($0); next }
         in_s && $0 ~ /^[[:space:]]*$/ { next }
+        in_s && $0 ~ /^[[:space:]]*#/ { next }
         in_s && indent($0) <= hind { in_s=0; done=1 }
         in_s {
             for (i = 1; i <= NF; i++)
